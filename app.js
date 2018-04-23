@@ -9,12 +9,19 @@
   ///////////////////////////////
  // Defualt Functions/Variables
 //////////////////////////////
-var angleMeasure = 0;
 
-//Input: Spectral Number (SN)
-//Function: Converts number from Spectral system to RGB system
-//Output: RGB Number
-//Purpose: To convert an (int) spectral number to 3 RGB values for use in functions that use RGB.
+var timer = 0; // Used later to keep track of runtime
+
+//Every "reRenderTime" ms, the Everloop lights will displace themselves by "angleDisplace" degrees.
+var angleDisplace = 10; //Diplacement of lights in degrees per "reRenderTime"
+var reRenderTime = 10; //In ms
+
+
+
+// Input: Spectral Number (SN)
+// Function: Converts number from Spectral system to RGB system
+// Output: RGB Number
+// Purpose: To convert an (int) spectral number to 3 RGB values for use in functions that use RGB.
 function spectralConversion(spectralNumber){
     var redVal; //Red channel
     var greenVal; //Green channel
@@ -67,20 +74,46 @@ function spectralConversion(spectralNumber){
 // Purpose: To type out and apply massive amounts of repetive/similar object data
 function spectralType(){
     var finalArray = [];
-    for(var i = 0; i < 1530; i++){
-        //Each object is designed 
-        finalArray.push({angle: (0 + i*(360/1530)), color: spectralConversion(i), blend: false});
+    
+    for(var i = 0; i < 35; i++){
+        //Each object is designed here.
+        //This is the format for each color point. There are more points than there are lights
+        //on the matrix to allow for a smoother transition between colors when the lights are rotating.
+        finalArray.push({angle: (i*(360/35)), color: spectralConversion(1529*i/35), blend: true});
+        //changed all 1530 to 35
     }
-    console.log(finalArray);
+    
     return finalArray;
 }
+
+var lightsData = [];
+
+lightsData = spectralType(); 
+//spectralType() offloads data to lightsData (a global variable)
+//to make the program run smoother.
+
+function angleChange(){
+    for(var i=0; i<35; i++){
+        // i<1530 ---> i<35
+        lightsData[i].angle += angleDisplace; //Iterates over every object to increment angle value
+        console.log("object: " + i);
+    }
+}
+
+
+
 //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 
-// Renders the lights on the matrix by outputting every possible light color
-// See function "spectralType()"
 
-matrix.led(
-    //change spectralType to output array of objects.
-    spectralType()
-).render();
+
+//Causes the lights to re-render with an increase in angle every reRenderTime milliseconds
+setInterval(function(){
+    
+    timer += reRenderTime;
+    console.log("Timer: " + timer);
+    console.log("rendering...");
+    matrix.led(lightsData).render(); 
+    angleChange();
+
+}, reRenderTime);
