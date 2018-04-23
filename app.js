@@ -100,7 +100,17 @@ function angleChange(){
     }
 }
 
+///////////////////
+// SLIDERS
+///////////////////
 
+	matrix.on('angleDisplace', function(p) {
+		angleDisplace = p.value;
+	});
+		
+	matrix.on('reRenderTime', function(p) {
+		reRenderTime = p.value;
+	});
 
 //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/

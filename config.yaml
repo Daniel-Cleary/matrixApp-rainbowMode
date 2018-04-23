@@ -6,3 +6,20 @@ keywords: ''
 name: rainbowMode
 shortName: rainbowMode
 displayName: Rainbow Mode
+
+screens:
+  - - angle
+  - - refresh
+widgets:
+    angle:
+        control: range
+        event: angleDisplace
+        min: -60
+        max: 60
+        label: Angle Diplacement
+    refresh:
+        control: range
+        event: reRenderTime
+        min: 50
+        max: 1000
+        label: Refresh Time
