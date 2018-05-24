@@ -7,6 +7,7 @@ name: rainbowMode
 shortName: rainbowMode
 displayName: Rainbow Mode
 
+# Sliders to control speed and direction
 screens:
   - - angle
   - - refresh
