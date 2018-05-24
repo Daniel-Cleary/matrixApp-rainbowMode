@@ -1,14 +1,15 @@
 //\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 ///\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   ///////////////////////////////
- // Defualt Functions/Variables
+ // Initial Functions/Variables
 //////////////////////////////
 
 var timer = 0; // Used later to keep track of runtime
 
 //Every "reRenderTime" ms, the Everloop lights will displace themselves by "angleDisplace" degrees.
+//Values are defined in advance to prevent any undefined errors
 var angleDisplace = 10; //Diplacement of lights in degrees per "reRenderTime"
-var reRenderTime = 10; //In ms
+var reRenderTime = 50; //In ms
 
 
 
@@ -22,6 +23,8 @@ function spectralConversion(spectralNumber){
     var blueVal; //Blue channel
     
     //Based off of input, a specific case is chosen for conversion
+    //Like a piecewise function with a domain of 0 to 1530, and has 3 different Y values
+    //(one for each color channel) for each X.
     switch(true) {
     case spectralNumber >= 0 && spectralNumber < 255://Red to Purple
         redVal = 255;
@@ -65,18 +68,16 @@ function spectralConversion(spectralNumber){
 // Input: None 
 // Function: Generates an array 
 // Output: Array of objects that will define the color and angle of the lights on the everloop 
-// Purpose: To type out and apply massive amounts of repetive/similar object data
+// Purpose: To create the objects that'll define the lights on the everloop
 function spectralType(){
     var finalArray = [];
     
     for(var i = 0; i < 35; i++){
-        //Each object is designed here.
-        //This is the format for each color point. There are more points than there are lights
-        //on the matrix to allow for a smoother transition between colors when the lights are rotating.
+        //Each led object is designed here.
+        //This is the format for each color point. There are as many points as there are lights on the matrix because too many points makes the matrix run slower.
         finalArray.push({angle: (i*(360/35)), color: spectralConversion(1529*i/35), blend: true});
-        //changed all 1530 to 35
+        //Originally was 1530 points. Changed to 35 to run smoother. Large improvement in quality
     }
-    
     return finalArray;
 }
 
@@ -84,8 +85,12 @@ var lightsData = [];
 
 lightsData = spectralType(); 
 //spectralType() offloads data to lightsData (a global variable)
-//to make the program run smoother.
+//to make the program run smoother
 
+// Input: None 
+// Function: Increments lightsData[i].angle by angleDisplace amount
+// Output: None
+// Purpose: Change position of lights
 function angleChange(){
     for(var i=0; i<35; i++){
         // i<1530 ---> i<35
