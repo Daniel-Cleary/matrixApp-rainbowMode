@@ -1,0 +1,44 @@
+function spectralConversion(spectralNumber){
+    var redVal; //Red channel
+    var greenVal; //Green channel
+    var blueVal; //Blue channel
+    
+    //Based off of input, a specific case is chosen for conversion
+    switch(true) {
+    case spectralNumber >= 0 && spectralNumber < 255://Red to Purple
+        redVal = 255;
+        greenVal = 0;
+        blueVal = spectralNumber;
+        break;
+    case spectralNumber >= 255 && spectralNumber < 510://Purple to Blue
+        redVal = 510 - spectralNumber;
+        greenVal = 0;
+        blueVal = 255;
+        break;
+    case spectralNumber >= 510 && spectralNumber < 765://Blue to Cyan
+        redVal = 0;
+        greenVal = spectralNumber - 510;
+        blueVal = 255;
+        break;
+    case spectralNumber >= 765 && spectralNumber < 1020://Cyan to Green
+        redVal = 0;
+        greenVal = 255;
+        blueVal = 1020 - spectralNumber;
+        break;
+    case spectralNumber >= 1020 && spectralNumber < 1275://Green to Yellow
+        redVal = spectralNumber - 1020;
+        greenVal = 255;
+        blueVal =  0;
+        break;
+    case spectralNumber >= 1275 && spectralNumber < 1530://Yellow to Red
+        redVal = 255;
+        greenVal = 1530 - spectralNumber;
+        blueVal = 0;
+        break;
+    default:
+        console.log("Oops, we got an error in the spectral converter!");
+    }
+    //Converts the RGB channels to a string the Matrix can use
+    var finalValue = 'rgb(' + redVal + ', ' + greenVal + ', ' + blueVal + ')';
+    return finalValue;
+}
